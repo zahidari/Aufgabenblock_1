@@ -1,1 +1,90 @@
 
+#include <iostream>
+#include <memory> // für smart pointer library
+#include <vector>
+// header s
+#include "Fahrzeug.h"
+
+//prototype s
+void vAufgabe_1();
+
+
+
+//*******************************
+// 
+//         MAIN 
+// 
+//*******************************
+
+int main()
+{
+    std::cout << "Hello World!\n";
+    vAufgabe_1();
+}
+//****** Ende der MAIN  ***********
+
+
+
+void vAufgabe_1() {
+
+    // dynamisches element
+    Fahrzeug* obj = new Fahrzeug();
+    delete obj; // ID = 1 gelöscht
+
+    {// Dank der Klammern wird das Objekt nach der Benutzung gelöscht.
+        
+        // Dynamisches Element mit unique_ptr
+        std::unique_ptr<Fahrzeug> u1 = std::make_unique<Fahrzeug>();//ID = 2
+        u1->vAusgabe();
+        // es gibt keine funktion namens use_count in unique_ptr.
+        
+
+
+        // fahrzeug vector 
+        std::vector<unique_ptr<Fahrzeug>> vu1;
+        // std::move, um u1 in den Vektor zu verschieben
+        vu1.push_back(std::move(u1));
+
+        // Vektor leeren - dies entfernt die Zeiger aus dem Vektor, nicht die zugewiesenen Objekte
+        vu1.clear();
+        // Objekte, auf die die Smart Pointer zeigen, werden automatisch freigegeben, wenn sie außerhalb des Gültigkeitsbereichs sind.
+
+
+
+
+        // Verwendung von shared_ptr
+        std::shared_ptr<Fahrzeug> s1 = std::make_shared<Fahrzeug>();
+        std::cout << "Anzahl der Zeiger, die auf s1 zeigen: " << 
+            s1.use_count() << std::endl;
+
+        std::shared_ptr<Fahrzeug> s2 = s1;
+        std::cout << "Anzahl der Zeiger nach Zuweisung von s1 zu s2: "
+            << s1.use_count() << std::endl;
+
+        std::shared_ptr<Fahrzeug> s3 = std::make_shared<Fahrzeug>();
+        std::cout << "Anzahl der Zeiger, die auf s1 zeigen: " <<
+            s3.use_count() << std::endl; //
+
+        // Alternativ: Vektor mit shared_ptr
+        std::vector<std::shared_ptr<Fahrzeug>> vs1;
+        vs1.push_back(s1); // ohne move() // anzeiger zeigt immernoch auf s1
+        s1.use_count(); //beweis
+        vs1.push_back(move(s3)); // mit move() // anzeiger gelöscht
+        //s3.use_count(); //null
+
+        /* Weak_pointer
+        Sie existieren nur, wenn sie mit einem zugehörigen shared_ptr
+        verbunden sind. Sie ermöglichen Zugriff auf ein Objekt,
+        erhöhen aber nicht den Referenzzähler des shared_ptr;
+        
+        -keine Besitzrechte an dem Objekt.
+        
+        -Wenn keine shared_ptr mehr auf das Objekt zeigen,
+         wird es gelöscht, selbst wenn noch weak_ptr darauf zeigen.
+        */
+
+    }
+    
+
+}
+
