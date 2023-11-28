@@ -1,11 +1,20 @@
 #include <iostream>
 #include <memory> // für smart pointer library
 #include <vector>
+
 // header s
 #include "Fahrzeug.h"
 
+// Deklaration der globalen Variablen
+double dGlobaleZeit = 0.0; 
+double dZeitTakt = 0.5;     // Zeittakt von 0.5 Stunden
+double dSimulierenBis = 2.0;// Gesamte Simulationsdauer von 5 Stunden
+    
+
+
 //prototype s
 void vAufgabe_1();
+void vAufgabe_1a();
 
 
 
@@ -18,7 +27,7 @@ void vAufgabe_1();
 int main()
 {
     std::cout << "Hello World!\n";
-    vAufgabe_1();
+    vAufgabe_1a();
 }
 //****** Ende der MAIN  ***********
 
@@ -34,6 +43,7 @@ void vAufgabe_1() {
         
         // Dynamisches Element mit unique_ptr
         std::unique_ptr<Fahrzeug> u1 = std::make_unique<Fahrzeug>();//ID = 2
+        u1->vKopf();
         u1->vAusgabe();
         // es gibt keine funktion namens use_count in unique_ptr.
         
@@ -86,4 +96,51 @@ void vAufgabe_1() {
     
 
 }
+void vAufgabe_1a() {
+    std::vector<std::unique_ptr<Fahrzeug>> fahrzeuge;
+
+    cout << "Wollen Sie die Fahrzeuge selber erstellen?(j/n)" << endl;
+    string sSollFahrzeugErstelltWerden;
+    cin >> sSollFahrzeugErstelltWerden;
+    
+
+    if (sSollFahrzeugErstelltWerden == "j") {
+        // Einlesen von Namen und Maximalgeschwindigkeit für 3 Fahrzeuge
+        for (int i = 1; i < 4; ++i) {
+
+            std::string name;
+            double maxGeschwindigkeit;
+
+            std::cout << "Bitte geben Sie den Namen für Fahrzeug " << i << " ein: ";
+            std::cin >> name;
+
+            std::cout << "Bitte geben Sie die maximale Geschwindigkeit für Fahrzeug " << i << " ein: ";
+            std::cin >> maxGeschwindigkeit;
+
+            // Fahrzeug mit eingelesenen Werten erstellen und zu fahrzeuge-Vektor hinzufügen
+            fahrzeuge.push_back(std::make_unique<Fahrzeug>(name, maxGeschwindigkeit));
+        }
+    }
+    else {
+        fahrzeuge.push_back(std::make_unique<Fahrzeug>("bmw", 100));
+        fahrzeuge.push_back(std::make_unique<Fahrzeug>("mc", 200));
+        fahrzeuge.push_back(std::make_unique<Fahrzeug>("porsche", 300));
+    }
+
+
+    // Simulation der Fahrzeuge über die angegebene Zeitspanne
+    while (dGlobaleZeit <= dSimulierenBis) {
+        std::cout << "Zeit: " << dGlobaleZeit << " Stunden\n";
+
+        // Für jedes Fahrzeug in fahrzeuge-Vektor die Simulation aufrufen und ausgeben
+        for (const auto& fahrzeug : fahrzeuge) {
+            fahrzeug->vSimulieren();
+            fahrzeug->vAusgabe();
+        }
+
+        // Globale Uhr erhöhen um den Zeittakt
+        dGlobaleZeit += dZeitTakt;
+    }
+}
+
 
