@@ -51,7 +51,7 @@ void Fahrzeug::vKopf()  {
 		<< resetiosflags(ios::right)
 		<<std::endl;
 }
-
+ 
  void Fahrzeug::vSimulieren()  {
 	// Überprüfen, ob die Simulation bereits für diese Zeiteinheit durchgeführt wurde
 	if (p_dZeit < dGlobaleZeit) {
