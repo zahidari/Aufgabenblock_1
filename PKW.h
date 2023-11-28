@@ -9,9 +9,9 @@ using namespace std;
 class PKW : public Fahrzeug
 {
 protected:
-	double const p_dVerbrauch = 5; // lt/100km
-	double const p_dTankVolumen = 55;
-	double p_dTankInhalt = 55;
+	double const p_dVerbrauch = 0; // lt/100km
+	double const p_dTankVolumen = 0;
+	double p_dTankInhalt = 0;
 
 public:
 	PKW(
