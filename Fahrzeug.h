@@ -12,7 +12,7 @@ class Fahrzeug
 private:
 	const string  p_sName; // default "noName"
 	const int  p_iID;
-	const double p_iMaxGeschwindigkeit; // default 100
+	const double p_dMaxGeschwindigkeit; // default 100
 
 	static int p_iMaxID;//initalized in fahrzeug.cpp begins with 0
 
@@ -39,7 +39,7 @@ public:
 	// getter
 	string getName() {return p_sName;}
 	int getID() {return p_iID;}
-	double getMaxGeschwindigkeit() {return p_iMaxGeschwindigkeit;}
+	double getMaxGeschwindigkeit() {return p_dMaxGeschwindigkeit;}
 	double getGesamtStraeke() {return p_dGesamtStraecke;}
 	double getGesamtZeit() { return p_dGesamtZeit; }
 	double getZeit() { return p_dZeit; }
@@ -49,9 +49,9 @@ public:
 	void setZeit(double x) {  p_dZeit = x; }
 
 	// Methoden
-	void vAusgabe();
-	void vKopf();
-	void vSimulieren();
+	virtual void vAusgabe() const;
+	void vKopf() const;
+	virtual void vSimulieren();
 };
 
 
