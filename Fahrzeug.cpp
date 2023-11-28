@@ -30,22 +30,24 @@ Fahrzeug::~Fahrzeug(){
 // Methoden
 void Fahrzeug::vAusgabe() const{
 
-	std::cout 
+	std::cout
 		<< setw(2) << p_iID << " "
 		<< setw(10) << p_sName << " "
-		<< std::setw(20)  << std::fixed << std::setprecision(2) << p_dMaxGeschwindigkeit << " "
-		<< std::setw(12) << p_dGesamtStraecke
-		<< endl;
+		<< std::setw(20) << std::fixed << std::setprecision(2) << p_dMaxGeschwindigkeit << " "
+		<< std::setw(12) << p_dGesamtStraecke;
 }
 
-void Fahrzeug::vKopf() const {
-	std::cout 
+void Fahrzeug::vKopf()  {
+	std::cout
 		<< setiosflags(ios::right)
 		<< std::setw(2) << "ID" << " "
 		<< std::setw(10) << "Name" << " "
 		<< std::setw(20) << "MaxGeschwindigkeit" << " "
-		<< std::setw(13) << "Gesamtstrecke" << std::endl;
-	std::cout << "--------------------------------------------------"
+		<< std::setw(13) << "Gesamtstrecke" << " " 
+		<< std::setw(10) << "TankInhalt" << " "
+		<< std::endl;
+	std::cout <<
+		 "-----------------------------------------------------------"
 		<< resetiosflags(ios::right)
 		<<std::endl;
 }
@@ -72,3 +74,6 @@ void Fahrzeug::vKopf() const {
 		std::cout << "Fahrzeug " << Fahrzeug::getName() << " wurde bereits in dieser Zeiteinheit bearbeitet." << std::endl;
 	}
 }
+ double Fahrzeug::dTanken(double menge) {
+	 return 0;
+ }
