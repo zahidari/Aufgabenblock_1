@@ -9,6 +9,10 @@ extern double dGlobaleZeit;
 
 class Fahrzeug
 {
+protected:
+	double p_dGesamtStraecke = 0;
+	double p_dGesamtZeit = 0; // gesamte zeit des Fahrzeugs
+	double p_dZeit = 0; // die zeit die zuletzt simuliert ist.
 private:
 	const string  p_sName; // default "noName"
 	const int  p_iID;
@@ -16,9 +20,7 @@ private:
 
 	static int p_iMaxID;//initalized in fahrzeug.cpp begins with 0
 
-	double p_dGesamtStraecke=0;
-	double p_dGesamtZeit =0; // gesamte zeit des Fahrzeugs
-	double p_dZeit = 0; // die zeit die zuletzt simuliert ist.
+	
 
 
 public:
@@ -50,8 +52,9 @@ public:
 
 	// Methoden
 	virtual void vAusgabe() const;
-	void vKopf() const;
+	static void vKopf() ; // weil es static ist cosnt geht nicht!
 	virtual void vSimulieren();
+	virtual double dTanken(double menge);
 };
 
 
