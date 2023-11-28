@@ -1,10 +1,11 @@
 #pragma once
 #include<iostream>
+#include <iomanip>
 #include <string>
 using namespace std;
 
-//globales 
-//#define p_iMaxID 0;
+
+extern double dGlobaleZeit;
 
 class Fahrzeug
 {
@@ -49,6 +50,8 @@ public:
 
 	// Methoden
 	void vAusgabe();
+	void vKopf();
+	void vSimulieren();
 };
 
 
