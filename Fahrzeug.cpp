@@ -11,7 +11,7 @@ Fahrzeug::Fahrzeug(
 )
 	:p_sName(name),
 	p_iID(++p_iMaxID),
-	p_iMaxGeschwindigkeit((maxGeschwindigkeit>=0)? maxGeschwindigkeit:0)
+	p_dMaxGeschwindigkeit((maxGeschwindigkeit>=0)? maxGeschwindigkeit:0)
 {
 
 	cout << "ID:" << p_iID
@@ -28,17 +28,17 @@ Fahrzeug::~Fahrzeug(){
 }
 
 // Methoden
-void Fahrzeug::vAusgabe() {
+void Fahrzeug::vAusgabe() const{
 
 	std::cout 
-		<< setw(2) << Fahrzeug::getID() << " "
-		<< setw(10) << Fahrzeug::getName() << " "
-		<< std::setw(20)  << std::fixed << std::setprecision(2) << Fahrzeug::getMaxGeschwindigkeit() << " "
-		<< std::setw(12) << Fahrzeug::getGesamtStraeke()
+		<< setw(2) << p_iID << " "
+		<< setw(10) << p_sName << " "
+		<< std::setw(20)  << std::fixed << std::setprecision(2) << p_dMaxGeschwindigkeit << " "
+		<< std::setw(12) << p_dGesamtStraecke
 		<< endl;
 }
 
-void Fahrzeug::vKopf() {
+void Fahrzeug::vKopf() const {
 	std::cout 
 		<< setiosflags(ios::right)
 		<< std::setw(2) << "ID" << " "
@@ -50,14 +50,14 @@ void Fahrzeug::vKopf() {
 		<<std::endl;
 }
 
-void Fahrzeug::vSimulieren() {
+ void Fahrzeug::vSimulieren()  {
 	// Überprüfen, ob die Simulation bereits für diese Zeiteinheit durchgeführt wurde
 	if (p_dZeit < dGlobaleZeit) {
 		// Zeit seit der letzten Simulation berechnen
 		double deltaTime = dGlobaleZeit - p_dZeit;
 
 		// Berechnung der Strecke basierend auf der maximalen Geschwindigkeit
-		double distanz = p_iMaxGeschwindigkeit * deltaTime;
+		double distanz = p_dMaxGeschwindigkeit * deltaTime;
 
 		// Aktualisierung der Gesamtstrecke des Fahrzeugs
 		p_dGesamtStraecke += distanz;
