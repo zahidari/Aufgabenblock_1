@@ -26,7 +26,21 @@ void PKW::vAusgabe() const
 
 void PKW::vSimulieren() 
 {
-	Fahrzeug::vSimulieren();
+	if (p_dTankInhalt > 0) {
+		double deltaTime1 = dGlobaleZeit - p_dZeit;
+		 
+		// Berechnung der Strecke basierend auf der maximalen Geschwindigkeit
+		double distanz = Fahrzeug::getMaxGeschwindigkeit() * deltaTime1;
+		double verbrauchInLiter = PKW::p_dVerbrauch *(distanz / 100);
+		if (p_dTankInhalt >= verbrauchInLiter)
+			p_dTankInhalt -= verbrauchInLiter;
+		else
+			p_dTankInhalt = 0;
+		Fahrzeug::vSimulieren();
+	}
+		
+
+
 }
 
 double PKW::dTanken(double dMenge) {
