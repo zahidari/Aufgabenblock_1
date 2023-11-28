@@ -4,6 +4,7 @@
 
 // header s
 #include "Fahrzeug.h"
+#include "PKW.h"
 
 // Deklaration der globalen Variablen
 double dGlobaleZeit = 0.0; 
@@ -15,6 +16,7 @@ double dSimulierenBis = 2.0;// Gesamte Simulationsdauer von 5 Stunden
 //prototype s
 void vAufgabe_1();
 void vAufgabe_1a();
+void vAufgabe_2();
 
 
 
@@ -45,6 +47,7 @@ void vAufgabe_1() {
         std::unique_ptr<Fahrzeug> u1 = std::make_unique<Fahrzeug>();//ID = 2
         u1->vKopf();
         u1->vAusgabe();
+        cout << endl<< endl;
         // es gibt keine funktion namens use_count in unique_ptr.
         
 
@@ -122,25 +125,35 @@ void vAufgabe_1a() {
         }
     }
     else {
-        fahrzeuge.push_back(std::make_unique<Fahrzeug>("bmw", 100));
+        fahrzeuge.push_back(std::make_unique<PKW>("bmw", 100,5));
+        fahrzeuge.push_back(std::make_unique<PKW>("VW", 100, 20));
         fahrzeuge.push_back(std::make_unique<Fahrzeug>("mc", 200));
         fahrzeuge.push_back(std::make_unique<Fahrzeug>("porsche", 300));
     }
 
+    //eine Flagge damit man den 0. anfangszeit sehen kann.
+    bool flag = 0;
 
     // Simulation der Fahrzeuge über die angegebene Zeitspanne
     while (dGlobaleZeit <= dSimulierenBis) {
         std::cout << "Zeit: " << dGlobaleZeit << " Stunden\n";
 
+        Fahrzeug::vKopf();
         // Für jedes Fahrzeug in fahrzeuge-Vektor die Simulation aufrufen und ausgeben
         for (const auto& fahrzeug : fahrzeuge) {
-            fahrzeug->vSimulieren();
+            if (flag == 1)
+                fahrzeug->vSimulieren();
             fahrzeug->vAusgabe();
+            cout << endl;
         }
-
+        cout << endl;
         // Globale Uhr erhöhen um den Zeittakt
         dGlobaleZeit += dZeitTakt;
+        flag = 1;
     }
+}
+void vAufgabe_2() {
+
 }
 
 
