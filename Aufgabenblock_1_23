@@ -5,18 +5,23 @@
 // header s
 #include "Fahrzeug.h"
 #include "PKW.h"
+#include "Fahrrad.h"
 
 // Deklaration der globalen Variablen
 double dGlobaleZeit = 0.0; 
 double dZeitTakt = 0.5;     // Zeittakt von 0.5 Stunden
-double dSimulierenBis = 2.0;// Gesamte Simulationsdauer von 5 Stunden
-    
+double dSimulierenBis = 5.0;// Gesamte Simulationsdauer
+double dEpsilon = 0.001;
 
 
 //prototype s
+void vSimulierenBis(vector<unique_ptr<Fahrzeug>> &);
+void erstellen(vector<unique_ptr<Fahrzeug>>&);
 void vAufgabe_1();
 void vAufgabe_1a();
 void vAufgabe_2();
+void vAufgabe_Probe();
+void vAufgabe_AB1();
 
 
 
@@ -29,7 +34,12 @@ void vAufgabe_2();
 int main()
 {
     std::cout << "Hello World!\n";
-    vAufgabe_1a();
+    
+    //vAufgabe_1();
+    //vAufgabe_1a();
+    vAufgabe_2();
+    //vAufgabe_Probe();
+    //vAufgabe_AB1();
 }
 //****** Ende der MAIN  ***********
 
@@ -38,15 +48,15 @@ int main()
 void vAufgabe_1() {
 
     // dynamisches element
-    Fahrzeug* obj = new Fahrzeug();
-    delete obj; // ID = 1 gelöscht
+    //Fahrzeug* obj = new Fahrzeug();
+    //delete obj; // ID = 1 gelöscht
 
     {// Dank der Klammern wird das Objekt nach der Benutzung gelöscht.
         
         // Dynamisches Element mit unique_ptr
         std::unique_ptr<Fahrzeug> u1 = std::make_unique<Fahrzeug>();//ID = 2
         u1->vKopf();
-        u1->vAusgabe();
+        cout << *u1;
         cout << endl<< endl;
         // es gibt keine funktion namens use_count in unique_ptr.
         
@@ -100,37 +110,124 @@ void vAufgabe_1() {
 
 }
 void vAufgabe_1a() {
-    std::vector<std::unique_ptr<Fahrzeug>> fahrzeuge;
-
-    cout << "Wollen Sie die Fahrzeuge selber erstellen?(j/n)" << endl;
-    string sSollFahrzeugErstelltWerden;
-    cin >> sSollFahrzeugErstelltWerden;
     
+    
+        std::vector<std::unique_ptr<Fahrzeug>> fahrzeuge;
 
-    if (sSollFahrzeugErstelltWerden == "j") {
-        // Einlesen von Namen und Maximalgeschwindigkeit für 3 Fahrzeuge
-        for (int i = 1; i < 4; ++i) {
-
+        // 3 aracın verilerini okuyun
+        for (int i = 0; i < 3; i++) {
             std::string name;
             double maxGeschwindigkeit;
 
-            std::cout << "Bitte geben Sie den Namen für Fahrzeug " << i << " ein: ";
+            std::cout << "Geben Sie den Namen des " << i + 1 << ". Fahrzeugs ein: ";
             std::cin >> name;
 
-            std::cout << "Bitte geben Sie die maximale Geschwindigkeit für Fahrzeug " << i << " ein: ";
+            std::cout << "Geben Sie die Maximalgeschwindigkeit des " << i + 1 << ". Fahrzeugs ein: ";
             std::cin >> maxGeschwindigkeit;
 
-            // Fahrzeug mit eingelesenen Werten erstellen und zu fahrzeuge-Vektor hinzufügen
+            // Araç nesneleri oluşturmak ve bunları vektörde saklamak için make_unique kullanın
             fahrzeuge.push_back(std::make_unique<Fahrzeug>(name, maxGeschwindigkeit));
         }
-    }
-    else {
-        fahrzeuge.push_back(std::make_unique<PKW>("bmw", 100,5));
-        fahrzeuge.push_back(std::make_unique<PKW>("VW", 100, 20));
-        fahrzeuge.push_back(std::make_unique<Fahrzeug>("mc", 200));
-        fahrzeuge.push_back(std::make_unique<Fahrzeug>("porsche", 300));
-    }
 
+        // Simülasyon için zaman aralığını ve zaman adımını seçin
+        double gesamtZeit = 5.0; // Örneğin 5 saat
+        double zeitTakt = 0.5;   // Zaman adımı başına 0,5 saat
+
+        // Simülasyon döngüsü
+        while (dGlobaleZeit < gesamtZeit) {
+            dGlobaleZeit += zeitTakt;
+
+            std::cout << std::endl;
+            std::cout << "Globale Zeit: " << dGlobaleZeit << endl;
+
+            // çıktı tablosu
+            Fahrzeug::vKopf();
+
+            // Her aracın simülasyon fonksiyonunu ve çıkış fonksiyonunu çağırın
+            for (auto& fahrzeug : fahrzeuge) {
+                fahrzeug->vSimulieren();
+
+                //fahrzeug->vAusgeben(std::cout);
+                std::cout << *fahrzeug << std::endl;
+            }
+        }
+    
+    
+}
+void vAufgabe_2() {
+    dSimulierenBis = 3.0;
+    dZeitTakt = 0.5;
+    
+
+    std::vector<std::unique_ptr<Fahrzeug>> fahrzeuge2;
+    erstellen(fahrzeuge2);
+    vSimulierenBis(fahrzeuge2);
+
+    // tanken
+    for (const auto& fahrzeug : fahrzeuge2) {
+            fahrzeug->dTanken();
+    }
+    dSimulierenBis = 5.0;
+    vSimulierenBis(fahrzeuge2);
+
+}
+
+
+void vAufgabe_Probe() {
+    Fahrzeug* pF1 = new PKW("Audi", 150, 8);
+    dGlobaleZeit = 0.0;
+    Fahrzeug::vKopf();
+    cout << endl;
+    cout << "jetzt komt sommeer" << endl;
+    cout << *pF1;
+    cout << endl;
+    dGlobaleZeit = 5.0;
+    cout << endl << "Globalezeit = " << dGlobaleZeit << endl;
+    pF1->vSimulieren();
+    cout << endl;
+    cout << *pF1 << endl;
+    
+    
+    delete pF1;
+    char c;
+    std::cin >> c;
+}
+
+void vAufgabe_AB1() {
+
+    int l = 0; // Laufindex für gezielte AUsgabe
+    vector<int> ausgabe{ 15 };
+    double dTakt = 0.3;
+
+    std::vector<unique_ptr<Fahrzeug>> vecFahrzeuge;
+    vecFahrzeuge.push_back(make_unique <PKW>("Audi", 231, 11.4));
+    vecFahrzeuge.push_back(make_unique <Fahrrad>("BMX", 19.8));
+    for (dGlobaleZeit = 0; dGlobaleZeit < 10; dGlobaleZeit += dTakt)
+    {
+        auto itL = find(ausgabe.begin(), ausgabe.end(), l);
+        if (itL != ausgabe.end()) {
+            std::cout << std::endl << l << " Globalezeit = " << dGlobaleZeit << std::endl;
+            Fahrzeug::vKopf();
+        }
+
+        for (int i = 0; i < (int)vecFahrzeuge.size(); i++)
+        {
+            vecFahrzeuge[i]->vSimulieren();
+            if (fabs(dGlobaleZeit - 3.0) < dTakt / 2)
+            {
+                vecFahrzeuge[i]->dTanken();
+            }
+            if (itL != ausgabe.end()) {
+                //std::cout << *vecFahrzeuge[i] << endl;
+            }
+        }
+        l++;
+    }
+    char c;
+    std::cin >> c;
+}
+
+void vSimulierenBis(vector<unique_ptr<Fahrzeug>>& fahrzeuge) {
     //eine Flagge damit man den 0. anfangszeit sehen kann.
     bool flag = 0;
 
@@ -139,11 +236,12 @@ void vAufgabe_1a() {
         std::cout << "Zeit: " << dGlobaleZeit << " Stunden\n";
 
         Fahrzeug::vKopf();
+
         // Für jedes Fahrzeug in fahrzeuge-Vektor die Simulation aufrufen und ausgeben
         for (const auto& fahrzeug : fahrzeuge) {
             if (flag == 1)
                 fahrzeug->vSimulieren();
-            fahrzeug->vAusgabe();
+            cout << *fahrzeug << endl;
             cout << endl;
         }
         cout << endl;
@@ -152,8 +250,91 @@ void vAufgabe_1a() {
         flag = 1;
     }
 }
-void vAufgabe_2() {
+void erstellen(vector<unique_ptr<Fahrzeug>>& fahrzeuge) {
+    
+    char sSollFahrzeugErstelltWerden;
+    int iWieVieleErstellen;
+    
+    while (1) {
+        cout << "Wollen Sie die Fahrzeuge selber erstellen?(j/n)" << endl;
+        cin >> sSollFahrzeugErstelltWerden;
+        if (sSollFahrzeugErstelltWerden == 'j' || sSollFahrzeugErstelltWerden == 'n')
+            break;
+    }
+    
+    
+    
+  
+    
 
+    if (sSollFahrzeugErstelltWerden == 'j') {
+        cout << "Wie viele Fahrzeuge möchten Sie erstellen?" << endl;
+        cin >> iWieVieleErstellen;
+
+        // Einlesen von Namen und Maximalgeschwindigkeit für iWieVieleErstellen Fahrzeuge
+        for (int i = 1; i < iWieVieleErstellen+1; ++i) {
+
+            std::string name;
+            double maxGeschwindigkeit;
+            double tankVerbrauch;
+            double tankInhalt;
+            // welches typ ? 
+            int iTyp;
+            string sTyp;
+            
+
+            
+                cout << "welches typ? bitte eine zahl"
+                    "waehlen. "
+                    "\n 1.Fahrzeug"
+                    "\n2.PKW"
+                    "\n3.Fahrrad" << endl;
+
+                cin >> iTyp;
+                switch (iTyp) {
+                case 1: 
+                    sTyp = "Fahrzeug"; 
+                    
+                    break;
+                case 2: sTyp = "PKW"; break;
+                case 3: sTyp = "Fahrrad"; break;
+                }
+                
+            
+
+
+            std::cout << "Bitte geben Sie den Namen für Fahrzeug " << i << " ein: ";
+            std::cin >> name;
+
+            std::cout << "Bitte geben Sie die maximale Geschwindigkeit für Fahrzeug " << i << " ein: ";
+            std::cin >> maxGeschwindigkeit;
+
+            if (sTyp == "PKW") {
+                std::cout << "Bitte geben Sie den Tankverbrauch (lt/100km) für Fahrzeug " << i << " ein: ";
+                std::cin >> tankVerbrauch;
+            }
+
+            // Fahrzeug mit eingelesenen Werten erstellen und zu fahrzeuge-Vektor hinzufügen
+            switch (iTyp) {
+            case 1:
+                fahrzeuge.push_back(std::make_unique<Fahrzeug>(name, maxGeschwindigkeit));
+                break;
+            case 2: 
+                fahrzeuge.push_back(std::make_unique<PKW>(name, maxGeschwindigkeit, tankVerbrauch));
+                break;
+            case 3: 
+                fahrzeuge.push_back(std::make_unique<Fahrrad>(name, maxGeschwindigkeit));
+                break;
+           
+            }
+            
+            
+        }
+    }
+    else {
+        fahrzeuge.push_back(std::make_unique<Fahrzeug>("fahrzeug", 200));
+        fahrzeuge.push_back(std::make_unique<PKW>("bmw", 100, 7));
+        fahrzeuge.push_back(std::make_unique<PKW>("VW", 120, 4.8));
+        fahrzeuge.push_back(std::make_unique<Fahrrad>("fahrrad", 20));
+    }
 }
-
-
