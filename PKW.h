@@ -28,8 +28,9 @@ public:
 	void setTankInhalt(double x);
 
 	//methoden
-	void vAusgabe() const override;
+	void vAusgabe(ostream&) const override;
 	void vSimulieren()  override;
 	double dTanken(double dMenge = std::numeric_limits<double>::infinity()) override;
+	double dGeschwindigkeit() override;
 };
 
