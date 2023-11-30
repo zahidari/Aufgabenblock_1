@@ -4,6 +4,7 @@
 int Fahrzeug::p_iMaxID = 0;
 
 
+
 //constractor
 Fahrzeug::Fahrzeug(
 	string name,
@@ -11,7 +12,8 @@ Fahrzeug::Fahrzeug(
 )
 	:p_sName(name),
 	p_iID(++p_iMaxID),
-	p_dMaxGeschwindigkeit((maxGeschwindigkeit>=0)? maxGeschwindigkeit:0)
+	p_dMaxGeschwindigkeit((maxGeschwindigkeit>=0)? maxGeschwindigkeit:0),
+	p_dGeschwindigkeit(p_dMaxGeschwindigkeit)
 {
 
 	cout << "ID:" << p_iID
@@ -28,13 +30,14 @@ Fahrzeug::~Fahrzeug(){
 }
 
 // Methoden
-void Fahrzeug::vAusgabe() const{
+void Fahrzeug::vAusgabe(ostream& stream) const{
 
-	std::cout
+	stream
 		<< setw(2) << p_iID << " "
 		<< setw(10) << p_sName << " "
 		<< std::setw(20) << std::fixed << std::setprecision(2) << p_dMaxGeschwindigkeit << " "
-		<< std::setw(12) << p_dGesamtStraecke;
+		<< std::setw(12) << p_dGesamtStraecke
+		<< std::setw(15) << std::fixed << std::setprecision(2)  << p_dGeschwindigkeit;
 }
 
 void Fahrzeug::vKopf()  {
@@ -44,7 +47,9 @@ void Fahrzeug::vKopf()  {
 		<< std::setw(10) << "Name" << " "
 		<< std::setw(20) << "MaxGeschwindigkeit" << " "
 		<< std::setw(13) << "Gesamtstrecke" << " " 
+		<< std::setw(15) << "Geschwindigkeit" << " "
 		<< std::setw(10) << "TankInhalt" << " "
+		
 		<< std::endl;
 	std::cout <<
 		 "-----------------------------------------------------------"
@@ -59,7 +64,7 @@ void Fahrzeug::vKopf()  {
 		double deltaTime = dGlobaleZeit - p_dZeit;
 
 		// Berechnung der Strecke basierend auf der maximalen Geschwindigkeit
-		double distanz = p_dMaxGeschwindigkeit * deltaTime;
+		double distanz = dGeschwindigkeit() * deltaTime;
 
 		// Aktualisierung der Gesamtstrecke des Fahrzeugs
 		p_dGesamtStraecke += distanz;
@@ -74,6 +79,48 @@ void Fahrzeug::vKopf()  {
 		std::cout << "Fahrzeug " << Fahrzeug::getName() << " wurde bereits in dieser Zeiteinheit bearbeitet." << std::endl;
 	}
 }
- double Fahrzeug::dTanken(double menge) {
+ double Fahrzeug::dTanken(double dMenge) {
 	 return 0;
  }
+
+ double Fahrzeug::dGeschwindigkeit()
+ {
+	 return p_dGeschwindigkeit;
+ }
+ ostream& operator<<(ostream& stream, Fahrzeug& f)
+ {
+	 f.vAusgabe(stream);
+	 return stream;
+ }
+ bool Fahrzeug::operator<(const Fahrzeug& f) const
+ {
+	 if (this->p_dGesamtStraecke < f.p_dGesamtStraecke)
+	 {
+		 return true;
+	 }
+	 else
+	 {
+		 return false;
+	 }
+ }
+
+ /*
+ Fahrzeug& operator=(const Fahrzeug& o) {
+	 if (this != &o) { // Überprüfung auf Selbstzuweisung
+		 // Kopieren der Stammdaten
+		 o.setName(Fahrzeug::getName());
+		 
+		 Fahrzeug::p_dMaxGeschwindigkeit = o.p_dMaxGeschwindigkeit;
+		 Fahrzeug::p_dGesamtStraecke = o.p_dGesamtStraecke;
+		 Fahrzeug::p_dGesamtZeit = o.p_dGesamtZeit;
+		 Fahrzeug::p_dZeit = o.p_dZeit;
+
+		 if (this->p_iID != o.p_iID) {
+			
+		 }
+		 
+	 }
+ 
+	 return *this;
+ }
+ */
