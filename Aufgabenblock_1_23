@@ -20,6 +20,7 @@ void erstellen(vector<unique_ptr<Fahrzeug>>&);
 void vAufgabe_1();
 void vAufgabe_1a();
 void vAufgabe_2();
+void vAufgabe_3();
 void vAufgabe_Probe();
 void vAufgabe_AB1();
 
@@ -37,9 +38,10 @@ int main()
     
     //vAufgabe_1();
     //vAufgabe_1a();
-    vAufgabe_2();
+    //vAufgabe_2();
+    //vAufgabe_3();
     //vAufgabe_Probe();
-    //vAufgabe_AB1();
+    vAufgabe_AB1();
 }
 //****** Ende der MAIN  ***********
 
@@ -202,6 +204,7 @@ void vAufgabe_AB1() {
     std::vector<unique_ptr<Fahrzeug>> vecFahrzeuge;
     vecFahrzeuge.push_back(make_unique <PKW>("Audi", 231, 11.4));
     vecFahrzeuge.push_back(make_unique <Fahrrad>("BMX", 19.8));
+
     for (dGlobaleZeit = 0; dGlobaleZeit < 10; dGlobaleZeit += dTakt)
     {
         auto itL = find(ausgabe.begin(), ausgabe.end(), l);
@@ -218,7 +221,7 @@ void vAufgabe_AB1() {
                 vecFahrzeuge[i]->dTanken();
             }
             if (itL != ausgabe.end()) {
-                //std::cout << *vecFahrzeuge[i] << endl;
+                std::cout << *vecFahrzeuge[i] << endl;
             }
         }
         l++;
@@ -338,3 +341,5 @@ void erstellen(vector<unique_ptr<Fahrzeug>>& fahrzeuge) {
         fahrzeuge.push_back(std::make_unique<Fahrrad>("fahrrad", 20));
     }
 }
+
+void vAufgabe_3(){}
