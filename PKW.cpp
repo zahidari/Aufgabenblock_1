@@ -8,7 +8,7 @@ PKW::PKW(string name,
 	:Fahrzeug::Fahrzeug(name, maxGeschwindigkeit),
 	p_dVerbrauch(tankVerbrauch),
 	p_dTankVolumen(tankVolumen),
-	p_dTankInhalt(tankVolumen/2)
+	p_dTankInhalt((tankVolumen/2))
 {}
 PKW::~PKW() { Fahrzeug::~Fahrzeug(); }
 double PKW::getVerbrauch() { return p_dVerbrauch; }
